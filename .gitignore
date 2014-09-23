@@ -1,0 +1,3 @@
+*.sublime-*
+PxMap*.js
+node_modules
