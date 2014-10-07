@@ -1,4 +1,4 @@
-/*global module:false*/
+/*global module:true*/
 module.exports = function(grunt) {
 
     var BANNER_TEMPLATE = '/*! <%= pkg.title %> | <%= pkg.homepage %> | <%= grunt.template.today("yyyy-mm-dd") %> */\n';
@@ -8,11 +8,13 @@ module.exports = function(grunt) {
         pkg: grunt.file.readJSON('package.json'),
         concat: {
             options: {
-                banner: BANNER_TEMPLATE
+                banner: BANNER_TEMPLATE + '(function(root){\n',
+                footer: '\n})(this);'
             },
             dist: {
                 src: [
-                    
+                    'js/Map.js',
+                    'js/UsStates.js'
                 ],
                 dest: '<%= pkg.name %>.js'
             }
@@ -33,7 +35,8 @@ module.exports = function(grunt) {
                 browser: true,
                 globals: {
                     jQuery: true,
-                    PxTouch: true,
+                    PxMap: true,
+                    $: true,
                     console: true
                 }
             }
