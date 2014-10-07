@@ -14,6 +14,7 @@ module.exports = function(grunt) {
             dist: {
                 src: [
                     'js/Map.js',
+                    'js/PositionMap.js',
                     'js/UsStates.js'
                 ],
                 dest: '<%= pkg.name %>.js'
