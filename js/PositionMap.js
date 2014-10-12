@@ -17,6 +17,13 @@ PositionMap.prototype.resize = function(options) {
     PxMap.Map.prototype.resize.call(this, options);
     this.positionMap.resize(options);
     this.positionMapDirty = true;
+
+    // Need to increment by colors by more than 1 to avoid issues
+    // with pixel blending at borders when map is resized
+
+    // TODO: implement a more robust solution that allows more than
+    // 50 states since 256 is max color value for one channel
+    this.colorIncrement = 5;
 };
 
 PositionMap.prototype.render = function() {
@@ -30,20 +37,23 @@ PositionMap.prototype.render = function() {
 
 PositionMap.prototype.getStateCode = function(x, y) {
     var pixelData = this.positionMap.ctx.getImageData(x, y, 1, 1).data;
-    var stateNumber = pixelData[0];
-    if (stateNumber > 0) {
-        return this.stateCodes[stateNumber - 1];
+    var colorValue = pixelData[0];
+
+    if (colorValue > 0 && colorValue % this.colorIncrement === 0) {
+        var stateIndex = (colorValue / this.colorIncrement) - 1;
+        return this.stateCodes[stateIndex];
     }
 
     return null;
 };
 
 PositionMap.prototype.getPositionStateRenderOptions = function(stateCode) {
-    
+
     var stateIndex = this.stateCodes.indexOf(stateCode);
+    var colorValue = (stateIndex + 1) * this.colorIncrement;
 
     return {
-        fill: 'rgba(' + (stateIndex + 1) + ',0,0,1)',
+        fill: 'rgba(' + colorValue + ',0,0,1)',
         strokeWidth: 0,
         stroke: 'transparent'
     };
