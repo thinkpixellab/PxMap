@@ -82,8 +82,12 @@ Map.prototype.renderState = function(stateCode, options, inMap) {
 
         // labels (todo)
         showLabel: false,
-        labelFont: 'sans-serif',
-        labelFontSize: '12px',
+        labelOffset: {
+            x: 0,
+            y: 0
+        },
+        labelFill: 'white',
+        labelFont: '12px sans-serif',
     }, options);
 
     var state = this.states[stateCode],
@@ -200,6 +204,20 @@ Map.prototype.renderState = function(stateCode, options, inMap) {
     ctx.strokeStyle = options.stroke;
     ctx.lineWidth = options.strokeWidth / scale;
     ctx.stroke();
+
+    // draw the label
+    if (options.showLabel) {
+        ctx.fillStyle = options.labelFill;
+        ctx.font = options.labelFont;
+        ctx.fillText(
+            stateCode,
+            startPoint.x + options.labelOffset.x, 
+            startPoint.y + options.labelOffset.y);
+    }
+
+    //ctx.fillStyle = 'black';
+    //ctx.font="20px sans-serif";
+    //ctx.fillText(stateCode,startPoint.x,startPoint.y);
 
     ctx.restore();
 };
