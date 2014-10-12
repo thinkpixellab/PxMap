@@ -91,7 +91,10 @@ Map.prototype.renderState = function(stateCode, options, inMap) {
     }, options);
 
     var state = this.states[stateCode],
-        startPoint = state.boxOffset,
+        startPoint = {
+            x: state.boxOffset.x,
+            y: state.boxOffset.y
+        },
         commands = state.commands,
         scale = 1,
         nudge = {
@@ -210,7 +213,7 @@ Map.prototype.renderState = function(stateCode, options, inMap) {
         ctx.fillStyle = options.labelFill;
         ctx.font = options.labelFont;
         ctx.fillText(
-            stateCode,
+            stateCode, 
             startPoint.x + options.labelOffset.x, 
             startPoint.y + options.labelOffset.y);
     }
